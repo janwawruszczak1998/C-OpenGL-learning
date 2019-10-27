@@ -27,15 +27,40 @@ void drawSquare(float x ,float y, float size){
     glFlush();
 }
 
-void drawBlankRect(float a){
-    // glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-    // drawSquare(a);
+void drawBlankRect(float x, float y, float size){
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    drawSquare(x,y,size);
 }
 
 void renderScene(void)
 {
+    float initial_size = 100;
+    int depth = 1;
     glClear(GL_COLOR_BUFFER_BIT);
-    drawSquare(-50, 50, 100);
+    drawSquare(-initial_size/2.0f, initial_size/2.0f, initial_size);
+
+    // drawSquare(-initial_size/2.0f, initial_size/2.0f, initial_size/3.0f);
+    // drawSquare(-initial_size/2.0f + initial_size/3.0f, initial_size/2.0f, initial_size/3.0f);
+    // drawSquare(-initial_size/2.0f + 2 * initial_size/3.0f, initial_size/2.0f, initial_size/3.0f);
+    
+    // drawSquare(-initial_size/2.0f, initial_size/2.0f - initial_size/3.0f, initial_size/3.0f);
+    // drawSquare(-initial_size/2.0f + initial_size/3.0f, initial_size/2.0f  - initial_size/3.0f, initial_size/3.0f);
+    // drawSquare(-initial_size/2.0f + 2 * initial_size/3.0f, initial_size/2.0f  - initial_size/3.0f, initial_size/3.0f);
+
+    // drawSquare(-initial_size/2.0f, initial_size/2.0f - 2 * initial_size/3.0f, initial_size/3.0f);
+    // drawSquare(-initial_size/2.0f + initial_size/3.0f, initial_size/2.0f  - 2 * initial_size/3.0f, initial_size/3.0f);
+    // drawSquare(-initial_size/2.0f + 2 * initial_size/3.0f,initial_size/2.0f  -  2 * initial_size/3.0f, initial_size/3.0f);
+
+    float x = -initial_size/2.0f;
+    float y = initial_size/2.0f;
+    for(int i = 0; i < 3; ++i){
+        if(i != 0)
+            y -= initial_size/3.0f;
+        for(int j = 0; j < 3; ++j){
+            drawSquare( x + j * (initial_size/3.0f), y, initial_size/3.0f);
+        }
+    }
+    
 }
 
 /*************************************************************************************/
