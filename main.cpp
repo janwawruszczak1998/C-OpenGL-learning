@@ -63,9 +63,9 @@ void renderScene(void)
 
         for(int j = 0; j < 3; ++j){
             if(i == 1 && j == 1)
-                {drawBlankSquare( x + j * (initial_size/3.0f), y, initial_size/3.0f);}
+                drawBlankSquare( x + j * (initial_size/3.0f), y, initial_size/3.0f);
             else
-                {drawSquare( x + j * (initial_size/3.0f), y, initial_size/3.0f);}
+                drawSquare( x + j * (initial_size/3.0f), y, initial_size/3.0f);
         }
     }
     
