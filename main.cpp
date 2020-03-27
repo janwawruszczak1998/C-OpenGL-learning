@@ -10,72 +10,87 @@ int getRand(int a, int b)
 }
 
 // x, y to wspolrzedne lewego gornego wierzcholka
-void drawSquare(float x ,float y, float size){
-    glBegin(GL_POLYGON);
+void drawSquare(float x, float y, float size)
+{
+    glBegin(GL_TRIANGLES);
 
-    glColor3f(getRand(0, 256) / 255.0f, getRand(0, 256) / 255.0f, getRand(0, 256) / 255.0f);
-    glVertex2f(x, y);
-    glVertex2f(x + size, y);
-    glVertex2f(x + size, y - size);
-    glVertex2f(x, y - size);
+    	glColor3ub(getRand(150, 255), getRand(150, 255), getRand(0, 10));
+    	glVertex2f(x, y);
+	glColor3ub(getRand(150, 255), getRand(150, 255), getRand(0, 10));
+    	glVertex2f(x + size, y);
+	glColor3ub(getRand(150, 255), getRand(150, 255), getRand(0, 10));	
+    	glVertex2f(x + size, y - size);
+
     glEnd();
 
-    glFlush();
+    glBegin(GL_TRIANGLES);
+
+    glColor3ub(getRand(150, 255), getRand(150, 255), getRand(0, 10));
+    glVertex2f(x + size, y - size);
+    glColor3ub(getRand(150, 255), getRand(150, 255), getRand(0, 10));
+    glVertex2f(x, y - size);
+    glColor3ub(getRand(150, 255), getRand(150, 255), getRand(0, 10));
+    glVertex2f(x, y);
+
+    glEnd();
 }
 
-void drawBlankSquare(float x, float y, float size){
-    glBegin(GL_POLYGON);
+void drawBlankSquare(float x, float y, float size)
+{
+    glBegin(GL_TRIANGLES);
     glColor3f(0.5f, 0.5f, 0.5f);
-    
+
     glVertex2f(x, y);
     glVertex2f(x + size, y);
     glVertex2f(x + size, y - size);
-    glVertex2f(x, y - size);
+
     glEnd();
 
-    glFlush();
+    glBegin(GL_TRIANGLES);
+
+    glVertex2f(x + size, y - size);
+    glVertex2f(x, y - size);
+    glVertex2f(x, y);
+
+    glEnd();
+}
+
+void drawCarpet(float x, float y, float size, int depth)
+{
+    if (depth == 0)
+    {
+	drawSquare(x, y, size / 3.0f + getRand(-5, 5));	
+        return;
+    }
+    for (int i = 0; i < 3; ++i)
+    {
+        if (i != 0)
+            y -= size / 3.0f;
+        for (int j = 0; j < 3; ++j)
+        {
+            if (i == 1 && j == 1)
+                drawBlankSquare(x + j * (size / 3.0f), y, size / 3.0f + getRand(-5, 5));
+            else
+            {
+                drawCarpet(x + j * (size / 3.0f), y, size / 3.0f, depth - 1);
+            }
+        }
+    }
 }
 
 void renderScene(void)
 {
     float initial_size = 100;
-    int depth = 1;
+    int depth = 7;
     glClear(GL_COLOR_BUFFER_BIT);
-    drawSquare(-initial_size/2.0f, initial_size/2.0f, initial_size);
-
-    // drawSquare(-initial_size/2.0f, initial_size/2.0f, initial_size/3.0f);
-    // drawSquare(-initial_size/2.0f + initial_size/3.0f, initial_size/2.0f, initial_size/3.0f);
-    // drawSquare(-initial_size/2.0f + 2 * initial_size/3.0f, initial_size/2.0f, initial_size/3.0f);
-    
-    // drawSquare(-initial_size/2.0f, initial_size/2.0f - initial_size/3.0f, initial_size/3.0f);
-    // drawBlankSquare(-initial_size/2.0f + initial_size/3.0f, initial_size/2.0f  - initial_size/3.0f, initial_size/3.0f);
-    // drawSquare(-initial_size/2.0f + 2 * initial_size/3.0f, initial_size/2.0f  - initial_size/3.0f, initial_size/3.0f);
-
-    // drawSquare(-initial_size/2.0f, initial_size/2.0f - 2 * initial_size/3.0f, initial_size/3.0f);
-    // drawSquare(-initial_size/2.0f + initial_size/3.0f, initial_size/2.0f  - 2 * initial_size/3.0f, initial_size/3.0f);
-    // drawSquare(-initial_size/2.0f + 2 * initial_size/3.0f,initial_size/2.0f  -  2 * initial_size/3.0f, initial_size/3.0f);
-
-    float x = -initial_size/2.0f;
-    float y = initial_size/2.0f;
-    for(int i = 0; i < 3; ++i){
-        if(i != 0)
-            y -= initial_size/3.0f;
-
-        for(int j = 0; j < 3; ++j){
-            if(i == 1 && j == 1)
-                drawBlankSquare( x + j * (initial_size/3.0f), y, initial_size/3.0f);
-            else
-                drawSquare( x + j * (initial_size/3.0f), y, initial_size/3.0f);
-        }
-    }
-    
+    drawCarpet(-50, 50, initial_size, depth);
+    glFlush();
 }
 
 void myInit(void)
 {
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 }
-
 
 void changeSize(GLsizei horizontal, GLsizei vertical)
 {
@@ -97,12 +112,11 @@ void changeSize(GLsizei horizontal, GLsizei vertical)
     glLoadIdentity();
 }
 
-
 int main(int argc, char *argv[])
 {
 
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
-    
+
     glutInit(&argc, argv);
     glutCreateWindow("Pierwszy program w OpenGL");
 
